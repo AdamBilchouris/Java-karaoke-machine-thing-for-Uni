@@ -14,7 +14,7 @@ public class LyricDisplayer
    private static Album album;   //makes a null album object
    private static int counter = 0;
    private static boolean newFileName = false;  //whether a new file should be made (if an exception is caught when reading the file)
-                                                //this will determine whether to truncate the file and to make a new one with the name new_FileName
+   //this will determine whether to truncate the file and to make a new one with the name new_FileName
 
    public static void main(String[] args)
    {
@@ -67,6 +67,7 @@ public class LyricDisplayer
 
             album.displayMenuFromLinkedList();
 
+            System.out.print("\n0. Exit the System");
             System.out.print("\nEnter a number to select a song or enter 0 to exit the system: ");
 
             try
@@ -195,75 +196,92 @@ public class LyricDisplayer
          System.out.print("Enter the name of the song: ");
          songName = kb.nextLine();
 
-         //keeps asking until the user enters an integer with the specified conditions
-         while(linesForSinger1Bool != true)
+         if(album.doesThisSongExist(songName) == true)
          {
-            System.out.print("Enter the amount of lyrics (an integer greater than 0): ");
             try
             {
-               linesForSinger1 = kb.nextInt();
-               kb.nextLine();
-               if(linesForSinger1 <= 0)
-               {
-                  System.out.println("Please enter an integer that is greater than 0\n");
-               }
-               else
-               {
-                  linesForSinger1Bool = true;
-               }
+               System.out.println("A song with this name already exists, returning to the sub-menu");
+               Thread.sleep(1500);
             }
-            catch(InputMismatchException e)
+            catch(InterruptedException e)
             {
-               System.out.println("Please enter an integer that is greater than 0\n");
-               kb.next();  //consumes the bad-bit
+               System.out.println("InterruptedException caught in LyricDisplayer.java, line 207");
             }
+            displaySongOptions(choice);
          }
-
-         Lyric[] singer1Array = new Lyric[linesForSinger1]; //creates a temporary lyric object for the temporary song object
-
-         System.out.println("You will be asked to enter lyrics for the song");
-
-         //keeps asking for doubles and strings until the arrary is full
-         for(int i = 0; i < linesForSinger1; i++)   
+         else
          {
-            System.out.print("\n");
-            boolean waitBool = false;
 
-            double wait = 0; String lyric = null;
-
-            while(waitBool != true)
+            //keeps asking until the user enters an integer with the specified conditions
+            while(linesForSinger1Bool != true)
             {
-               System.out.print("Enter the wait (a double that is greater than 0) for line " + (i + 1) + ": ");
+               System.out.print("Enter the amount of lyrics (an integer greater than 0): ");
                try
                {
-                  wait = kb.nextDouble();
-                  kb.nextLine(); //consumes \n
-                  if(wait <= 0.0)
+                  linesForSinger1 = kb.nextInt();
+                  kb.nextLine();
+                  if(linesForSinger1 <= 0)
                   {
-                     System.out.println("Please enter an double that is greater than 0\n");
+                     System.out.println("Please enter an integer that is greater than 0\n");
                   }
                   else
                   {
-                     waitBool = true;
+                     linesForSinger1Bool = true;
                   }
                }
                catch(InputMismatchException e)
                {
-                  System.out.println("Please enter a double that is greater than 0\n");
-                  kb.next();
+                  System.out.println("Please enter an integer that is greater than 0\n");
+                  kb.next();  //consumes the bad-bit
                }
             }
-            System.out.print("Please enter the lyric for line " + (i + 1) + ": ");
-            lyric = kb.nextLine();
 
-            singer1Array[i] = new Lyric(lyric, wait); //makes a new lyric object at that index
+            Lyric[] singer1Array = new Lyric[linesForSinger1]; //creates a temporary lyric object for the temporary song object
+
+            System.out.println("You will be asked to enter lyrics for the song");
+
+            //keeps asking for doubles and strings until the arrary is full
+            for(int i = 0; i < linesForSinger1; i++)   
+            {
+               System.out.print("\n");
+               boolean waitBool = false;
+
+               double wait = 0; String lyric = null;
+
+               while(waitBool != true)
+               {
+                  System.out.print("Enter the wait (a double that is greater than 0) for line " + (i + 1) + ": ");
+                  try
+                  {
+                     wait = kb.nextDouble();
+                     kb.nextLine(); //consumes \n
+                     if(wait <= 0.0)
+                     {
+                        System.out.println("Please enter an double that is greater than 0\n");
+                     }
+                     else
+                     {
+                        waitBool = true;
+                     }
+                  }
+                  catch(InputMismatchException e)
+                  {
+                     System.out.println("Please enter a double that is greater than 0\n");
+                     kb.next();
+                  }
+               }
+               System.out.print("Please enter the lyric for line " + (i + 1) + ": ");
+               lyric = kb.nextLine();
+
+               singer1Array[i] = new Lyric(lyric, wait); //makes a new lyric object at that index
+            }
+
+            Song tempSolo = new Solo(songName, songType, 0, linesForSinger1, singer1Array);  //creates a temporary song object to be added to the linked list
+            album.insertSongBehind(choice - 1, tempSolo);   //choice - 1, due to the way indices work
+            writeSongsToFile(fileName);                     //writes the linked list to the file again
+            displaySongOptions(choice + 1);                 //as the new song is at the index 'choice', adding 1 will return to the original song
+            //the java garbage collector will get rid of the orphaned Song object as with the lyric array
          }
-
-         Song tempSolo = new Solo(songName, songType, 0, linesForSinger1, singer1Array);  //creates a temporary song object to be added to the linked list
-         album.insertSongBehind(choice - 1, tempSolo);   //choice - 1, due to the way indices work
-         writeSongsToFile(fileName);                     //writes the linked list to the file again
-         displaySongOptions(choice + 1);                 //as the new song is at the index 'choice', adding 1 will return to the original song
-         //the java garbage collector will get rid of the orphaned Song object as with the lyric array
       }
 
       //user input if the user enters D
@@ -272,137 +290,155 @@ public class LyricDisplayer
          System.out.print("Enter the name of the song: ");
          songName = kb.nextLine();
 
-         while(linesForSinger1Bool != true)
+         if(album.doesThisSongExist(songName) == true)
          {
-            System.out.print("Enter the amount of lyrics for the first singer (an integer greater than 0): ");
             try
             {
-               linesForSinger1 = kb.nextInt();
-               kb.nextLine(); //consumes \n
-               if(linesForSinger1 <= 0)
-               {
-                  System.out.println("Please enter an integer that is greater than 0\n");
-               }
-               else
-               {
-                  linesForSinger1Bool = true;
-               }
+               System.out.println("A song with this name already exists, returning to the sub-menu");
+               Thread.sleep(1500);
             }
-            catch(InputMismatchException e)
+            catch(InterruptedException e)
             {
-               System.out.println("Please enter an integer that is greater than 0\n");
-               kb.next();  //consumes the bad-bit
+               System.out.println("InterruptedException caugh in LyricDisplayer.java line 301");
             }
+            
+            displaySongOptions(choice);
          }
 
-         Lyric[] singer1Array = new Lyric[linesForSinger1]; //creates a temporary lyric array for the first singer
-
-         while(linesForSinger2Bool != true)
+         else
          {
-            System.out.print("Enter the amount of lyrics for the second singer (an integer greater than 0): ");
-            try
+            while(linesForSinger1Bool != true)
             {
-               linesForSinger2 = kb.nextInt();
-               kb.nextLine(); //consumes \n
-
-               if(linesForSinger2 <= 0)
-               {
-                  System.out.println("Please enter an integer that is greater than 0\n");
-               }
-               else
-               {
-                  linesForSinger2Bool = true;
-               }
-            }
-            catch(InputMismatchException e)
-            {
-               System.out.println("Please enter an integer greater than 0\n");
-               kb.next();
-            }
-         }
-
-         Lyric[] singer2Array = new Lyric[linesForSinger2]; //creates a temporary lyric arry for the second singer
-
-         System.out.println("You are adding lyrics for the first singer");
-         for(int i = 0; i < linesForSinger1; i++)   
-         {
-            System.out.print("\n");
-            boolean waitBool = false;
-
-            double wait = 0; String lyric = null;
-
-            while(waitBool != true)
-            {
-               System.out.print("Enter the wait (for the first singer (a double greater than 0)) for line " + (i + 1) + ": ");
+               System.out.print("Enter the amount of lyrics for the first singer (an integer greater than 0): ");
                try
                {
-                  wait = kb.nextDouble();
+                  linesForSinger1 = kb.nextInt();
                   kb.nextLine(); //consumes \n
-                  if(wait <= 0.0)
+                  if(linesForSinger1 <= 0)
                   {
-                     System.out.println("Please enter a double that is greater than 0\n");
+                     System.out.println("Please enter an integer that is greater than 0\n");
                   }
                   else
                   {
-                     waitBool = true;
+                     linesForSinger1Bool = true;
                   }
                }
                catch(InputMismatchException e)
                {
-                  System.out.println("Please enter a double that is greater than 0\n");
-                  kb.next();
+                  System.out.println("Please enter an integer that is greater than 0\n");
+                  kb.next();  //consumes the bad-bit
                }
             }
-            System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
-            lyric = kb.nextLine();
 
-            singer1Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
-         }
+            Lyric[] singer1Array = new Lyric[linesForSinger1]; //creates a temporary lyric array for the first singer
 
-         System.out.println("You are adding lyrics for the second singer");
-         for(int i = 0; i < linesForSinger2; i++)   
-         {
-            System.out.print("\n");
-            boolean waitBool = false;
-
-            double wait = 0; String lyric = null;
-
-            while(waitBool != true)
+            while(linesForSinger2Bool != true)
             {
-               System.out.print("Enter the wait (for the second singer (a double that is greater than 0)) for line " + (i + 1) + ": ");
+               System.out.print("Enter the amount of lyrics for the second singer (an integer greater than 0): ");
                try
                {
-                  wait = kb.nextDouble();
+                  linesForSinger2 = kb.nextInt();
                   kb.nextLine(); //consumes \n
 
-                  if(wait <= 0.0)
+                  if(linesForSinger2 <= 0)
                   {
-                     System.out.println("Please enter a double that is greater than 0\n");
+                     System.out.println("Please enter an integer that is greater than 0\n");
                   }
                   else
                   {
-                     waitBool = true;
+                     linesForSinger2Bool = true;
                   }
                }
                catch(InputMismatchException e)
                {
-                  System.out.println("Please enter a double that is greater than 0\n");
+                  System.out.println("Please enter an integer greater than 0\n");
                   kb.next();
                }
             }
-            System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
-            lyric = kb.nextLine();
 
-            singer2Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
+            Lyric[] singer2Array = new Lyric[linesForSinger2]; //creates a temporary lyric arry for the second singer
 
+            System.out.println("You are adding lyrics for the first singer");
+            for(int i = 0; i < linesForSinger1; i++)   
+            {
+               System.out.print("\n");
+               boolean waitBool = false;
+
+               double wait = 0; String lyric = null;
+
+               while(waitBool != true)
+               {
+                  System.out.print("Enter the wait (for the first singer (a double greater than 0)) for line " + (i + 1) + ": ");
+                  try
+                  {
+                     wait = kb.nextDouble();
+                     kb.nextLine(); //consumes \n
+                     if(wait <= 0.0)
+                     {
+                        System.out.println("Please enter a double that is greater than 0\n");
+                     }
+                     else
+                     {
+                        waitBool = true;
+                     }
+                  }
+                  catch(InputMismatchException e)
+                  {
+                     System.out.println("Please enter a double that is greater than 0\n");
+                     kb.next();
+                  }
+               }
+               System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
+               lyric = kb.nextLine();
+
+               singer1Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
+            }
+
+            System.out.println("You are adding lyrics for the second singer");
+            for(int i = 0; i < linesForSinger2; i++)   
+            {
+               System.out.print("\n");
+               boolean waitBool = false;
+
+               double wait = 0; String lyric = null;
+
+               while(waitBool != true)
+               {
+                  System.out.print("Enter the wait (for the second singer (a double that is greater than 0)) for line " + (i + 1) + ": ");
+                  try
+                  {
+                     wait = kb.nextDouble();
+                     kb.nextLine(); //consumes \n
+
+                     if(wait <= 0.0)
+                     {
+                        System.out.println("Please enter a double that is greater than 0\n");
+                     }
+                     else
+                     {
+                        waitBool = true;
+                     }
+                  }
+                  catch(InputMismatchException e)
+                  {
+                     System.out.println("Please enter a double that is greater than 0\n");
+                     kb.next();
+                  }
+               }
+               System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
+               lyric = kb.nextLine();
+
+               singer2Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
+
+            }
+
+            Song tempDuet = new Duet(songName, songType, 0, linesForSinger1, linesForSinger2, singer1Array, singer2Array); //creates a temporary duet object
+            album.insertSongBehind(choice - 1, tempDuet);  //this is the same as above for the solo object, instead it is now with a duet object 
+
+            writeSongsToFile(fileName);                  //writes the linked list to the file again
+
+            displaySongOptions(choice + 1);              //as above with the solo option
          }
-
-         Song tempDuet = new Duet(songName, songType, 0, linesForSinger1, linesForSinger2, singer1Array, singer2Array); //creates a temporary duet object
-         album.insertSongBehind(choice - 1, tempDuet);  //this is the same as above for the solo object, instead it is now with a duet object 
-
-         writeSongsToFile(fileName);                  //writes the linked list to the file again
-
-         displaySongOptions(choice + 1);              //as above with the solo option
       }
 
       else
@@ -437,7 +473,7 @@ public class LyricDisplayer
    private static void writeSongsToFile(String fileName)
    {
       File file = new File(fileName);
-   
+
       //this can be used instead of FileNotFoundException
       if(!file.exists())
       {
@@ -666,7 +702,7 @@ public class LyricDisplayer
 
                   String linesToReadString = fileRead.readLine();
                   lineCounter += 1;
-                  
+
                   //reads in both number of lyrics
                   StringTokenizer duetTokenizer = new StringTokenizer(linesToReadString);
                   String linesToRead_1 = duetTokenizer.nextToken().trim();

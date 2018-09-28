@@ -291,7 +291,7 @@ public class MyLinkedList
 
       while(p != null)
       {
-         System.out.println(menuOption + " " + p.getName());
+         System.out.println(menuOption+ ". " + p.getName());
          menuOption++;
          p = p.getNext();
       }
@@ -373,6 +373,24 @@ public class MyLinkedList
 
       p.displaySong();
 
+   }
+
+   public boolean doesThisSongExist(String choiceString)
+   {
+      Node p = head;
+      
+      while(p != null)
+      {
+         if(choiceString.equalsIgnoreCase(p.getName()))
+         {
+            return true;
+         }
+         else
+         {
+            p = p.getNext();
+         }
+      }
+      return false;
    }
 
    //No longer used

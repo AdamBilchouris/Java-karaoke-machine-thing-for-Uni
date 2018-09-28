@@ -73,6 +73,11 @@ public class Album
       return listOfSongs.sizeOfList();
    }
 
+   public boolean doesThisSongExist(String choiceString)
+   {
+      return listOfSongs.doesThisSongExist(choiceString);
+   }
+
    /*public boolean isSinger1Empty(int choice)
    {
       return listOfSongs.isSinger1Empty(choice);
