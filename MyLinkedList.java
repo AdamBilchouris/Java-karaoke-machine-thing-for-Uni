@@ -71,18 +71,6 @@ public class MyLinkedList
          song.loadSecondSinger(lyricArrayParameter);
       }
 
-      //not used
-      public boolean isEmptySinger1()
-      {
-         return song.isEmptySinger1();
-      }
-
-      //not used
-      public boolean isEmptySinger2()
-      {
-         return song.isEmptySinger2();
-      }
-
       //retuns a string for a song object to write to the file
       public String stringForFileWriting()
       {
@@ -297,67 +285,6 @@ public class MyLinkedList
       }
    }
 
-   //No longer used
-   public void loadFirstSinger(Lyric[] lyricArrayParameter)
-   {
-      boolean found = false;
-      Node p = head;
-
-      while(p != null)
-      {  
-         if(p.isEmptySinger1() == true)
-         {
-            found = true;
-            break;
-         }
-
-         if(p.isEmptySinger1() == false)
-         {
-            p = p.getNext();
-         }
-      }
-
-      if(found == true)
-      {
-         p.addToSinger1(lyricArrayParameter);
-      }
-      else
-      {
-         System.out.println("Cannot add lyrics to the first singer");
-      }
-
-   }
-
-   //No longer used
-   public void loadSecondSinger(Lyric[] lyricArrayParameter)
-   {
-      boolean found = false;
-      Node p = head;
-
-      while(p != null)
-      {  
-         if(p.isEmptySinger2() == true)
-         {
-            found = true;
-            break;
-         }
-
-         if(p.isEmptySinger2() == false)
-         {
-            p = p.getNext();
-         }
-      }
-
-      if(found == true)
-      {
-         p.addToSinger2(lyricArrayParameter);
-      }
-      else
-      {
-         System.out.println("Cannot add lyrics to the second singer");
-      }
-   }
-
    //displays a specific song at a certain index, similar to
    //removeSpecificSong(int choice)
    public void displaySong(int choice)
@@ -391,36 +318,6 @@ public class MyLinkedList
          }
       }
       return false;
-   }
-
-   //No longer used
-   public boolean isSinger1Empty(int choice)
-   {
-      Node p = head;
-      int toChoice = 0;
-
-      while(toChoice < choice)
-      {
-         p = p.getNext();
-         toChoice += 1;
-      }
-
-      return p.isEmptySinger1();
-   }
-
-   //No longer used
-   public boolean isSinger2Empty(int choice)
-   {
-      Node p = head;
-      int toChoice = 0;
-
-      while(toChoice < choice)
-      {
-         p = p.getNext();
-         toChoice += 1;
-      }
-
-      return p.isEmptySinger2();
    }
 
    //Similar to displaySong(int choice) and removeSpecificSong(int choice)

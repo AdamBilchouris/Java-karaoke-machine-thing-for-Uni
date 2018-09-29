@@ -23,32 +23,6 @@ public class Duet extends Song
       loadSecondSinger(secondSinger);
    }
 
-   //Not used
-   public boolean isEmptySinger1()
-   {
-      if(singer1 == null || singer1[0] == null)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   //Not used
-   public boolean isEmptySinger2()
-   {
-      if(singer2 == null | singer2[0] == null)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
    //Same as the Solo class
    public void loadFirstSinger(Lyric[] lyricArrayParameter)
    {
@@ -78,8 +52,6 @@ public class Duet extends Song
    {
       //indices for the two Lyric arrays
       int singer1Counter = 0; int singer2Counter = 0;
-      //a variable taht isnt used at all, should probably remove it
-      double waitDifference = 0;
       //gets the wait for the singers at index 0
       double initWaitSinger1 = singer1[0].getWait(); double initWaitSinger2 = singer2[0].getWait();
       //sets the difference of the singer's wait and the lowest wait to 1
@@ -97,9 +69,10 @@ public class Duet extends Song
                return;
             }*/
 
+            //if the two waits are equal
             if(waitForSinger1 == waitForSinger2)
             {
-               double wait = waitForSinger1;
+               double wait = waitForSinger1; //as the waits are equal, it assigns it to the wait for the first singer
                try
                {
                   System.out.println("\fSinger 1 = " + singer1[singer1Counter].getLyric() + "\nSinger 2 = " + singer2[singer2Counter].getLyric());
@@ -109,14 +82,17 @@ public class Duet extends Song
                {
                   System.out.println("InterruptedException caught in display() method of Duet.java");
                }
-               waitCheckerSinger1 = waitForSinger1 - wait; waitCheckerSinger2 = waitForSinger2 - wait;
-               System.out.println("Checker Singer 1 = " + waitCheckerSinger1 + "\nChecker Singer 2 = " + waitCheckerSinger2);
+               waitCheckerSinger1 = waitForSinger1 - wait; waitCheckerSinger2 = waitForSinger2 - wait;   //this is the difference between the wait and the wait for each singer
 
+               //if the wait difference for the first singer is 0, move onto the
+               //next index
                if(waitCheckerSinger1 == 0)
                {
                   singer1Counter += 1;
                   waitForSinger1 = singer1[singer1Counter].getWait();
                }
+               //if the wait difference for the second singer is 0, move onto
+               //the next index
                if(waitCheckerSinger2 == 0)
                {
                   singer2Counter += 1;
@@ -124,10 +100,10 @@ public class Duet extends Song
                }
             }
 
+            //if the two waits are different
             if(waitForSinger1 < waitForSinger2)
             {
-               double wait = waitForSinger1;
-               waitDifference = waitForSinger2 - waitForSinger1;
+               double wait = waitForSinger1; //assigns it to the smaller wait
                try
                {
                   System.out.println("\fSinger 1 = " + singer1[singer1Counter].getLyric() + "\nSinger 2 = " + singer2[singer2Counter].getLyric());
@@ -139,12 +115,15 @@ public class Duet extends Song
                }
                waitCheckerSinger1 = waitForSinger1 - wait; waitCheckerSinger2 = waitForSinger2 - wait;
 
+               //as above, but this this the wait for singer2 now becomes the
+               //difference between it and singer1's wait
                if(waitCheckerSinger1 == 0)
                {
                   singer1Counter += 1;
                   waitForSinger1 = singer1[singer1Counter].getWait();
                   waitForSinger2 = waitCheckerSinger2;
                }
+               //as above but with respect to the second singer
                if(waitCheckerSinger2 == 0)
                {
                   singer2Counter += 1;
@@ -153,10 +132,10 @@ public class Duet extends Song
                }
             }
 
+            //as above but when the wait for singer1 is larger than singer2
             if(waitForSinger1 > waitForSinger2)
             {
-               double wait = waitForSinger2;
-               waitDifference = waitForSinger1 - waitForSinger2;
+               double wait = waitForSinger2; //assigns it to the smaller wait
 
                try
                {
@@ -170,6 +149,7 @@ public class Duet extends Song
 
                waitCheckerSinger1 = waitForSinger1 - wait; waitCheckerSinger2 = waitForSinger2 - wait;
 
+               //the same as the < if statement
                if(waitCheckerSinger1 == 0)
                {
                   singer1Counter += 1;
@@ -224,4 +204,3 @@ public class Duet extends Song
       return toReturn;
    }
 }
-

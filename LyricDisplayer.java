@@ -15,6 +15,7 @@ public class LyricDisplayer
    private static int counter = 0;
    private static boolean newFileName = false;  //whether a new file should be made (if an exception is caught when reading the file)
    //this will determine whether to truncate the file and to make a new one with the name new_FileName
+   private static boolean emptyLinkedListInsertion = false;
 
    public static void main(String[] args)
    {
@@ -53,13 +54,54 @@ public class LyricDisplayer
 
       int choice; boolean boolChoice = false;
 
-      if(album.isLinkedListEmpty() == true)  //if there are no songs in the album (i.e. deleted them all, it will exit the program)
+      if(album.isLinkedListEmpty() == true)  //if there are no songs in the album (i.e. deleted them all, it will display a different menu.
       {
-         System.out.println("There are no songs in the album, leaving the system");
-         System.exit(0);
+         while(boolChoice == false)
+         {
+            System.out.println(album.getName());
+
+            int tempChoice = 0;
+            boolean hasEnteredInteger = false;
+
+            if(album.isLinkedListEmpty() == true)
+            {
+               while(hasEnteredInteger != true)
+               {
+                  System.out.println("There are no songs in the linked list, would you like to add a song or exit the system?");
+                  System.out.println("1. Enter a song\n\n0. Exit the System");
+                  System.out.print("Enter your choice: ");
+                  try
+                  {
+                     tempChoice = kb.nextInt();
+                     kb.nextLine();
+                     hasEnteredInteger = true;
+                     emptyLinkedListInsertion = true;
+                  }
+                  catch(InputMismatchException e)
+                  {
+                     System.out.println("Please enter an integer");
+                     kb.next();  //gets rid of the bad bit
+                  }
+               }
+               if(tempChoice == 0)
+               {
+                  System.exit(0);
+               }
+               if(tempChoice == 1)
+               {
+                  addSongBehind(0);
+               }
+               else
+               {
+                  System.out.println("That is not a valid choice");
+               }
+
+            }
+         }
+
       }
 
-      else
+      else  //for a non-empty linked list
       {
          while(boolChoice == false)
          {
@@ -76,6 +118,15 @@ public class LyricDisplayer
                if(choice < 0 || choice > album.getSizeOfList())   //if the choice provided is less than 0 or greater than the size of the list, display an error and ask again
                {
                   System.out.println("Please enter a valid number, it must be between (inclusive) 0 and " + album.getSizeOfList());
+                  try
+                  {
+                     Thread.sleep(1500);
+                  }
+                  catch(InterruptedException e)
+                  {
+                     System.out.println("InterruptedException caught on line 123 of LyricDisplayer.java");
+                  }
+                  System.out.println("\n\n");
                }
                else if(choice == 0)
                {
@@ -105,7 +156,7 @@ public class LyricDisplayer
 
       do
       {
-         album.displaySongOptions(choice - 1); 
+         album.displaySongOptions(choice - 1);
 
          System.out.print("\nSelect a function: ");
 
@@ -169,14 +220,14 @@ public class LyricDisplayer
       //keeps asking until the user enters either an S or D character
       while(songTypeBool != true)
       {
-         System.out.print("Enter the song type (either S or D): ");
+         System.out.print("Enter the song type (either S or D) or Q to return to the sub-menu: ");
          try
          {
             songType = kb.next().trim().toUpperCase().charAt(0);  //gets the first character
             kb.nextLine(); //consumes the \n
-            if(songType != 'S' && songType != 'D')
+            if(songType != 'S' && songType != 'D' && songType != 'Q')
             {
-               System.out.println("Please enter either S or D for the song type\n\n");
+               System.out.println("Please enter either S or D for the song type, or Q to exit to the sub-menu\n\n");
             }
             else
             {
@@ -191,6 +242,10 @@ public class LyricDisplayer
       }
 
       //gets user input if the song type is S
+      if(songType == 'Q')
+      {
+         displaySongOptions(choice);
+      }
       if(songType == 'S')
       {
          System.out.print("Enter the name of the song: ");
@@ -277,10 +332,20 @@ public class LyricDisplayer
             }
 
             Song tempSolo = new Solo(songName, songType, 0, linesForSinger1, singer1Array);  //creates a temporary song object to be added to the linked list
-            album.insertSongBehind(choice - 1, tempSolo);   //choice - 1, due to the way indices work
-            writeSongsToFile(fileName);                     //writes the linked list to the file again
-            displaySongOptions(choice + 1);                 //as the new song is at the index 'choice', adding 1 will return to the original song
-            //the java garbage collector will get rid of the orphaned Song object as with the lyric array
+            if(emptyLinkedListInsertion == false)
+            {
+               album.insertSongBehind(choice, tempSolo);   //choice, as we want to insert it after the current song, if we want to insert it before, it would be choice -1, due to the way indices work 
+               writeSongsToFile(fileName);                 //writes the linked list to the file again
+               displaySongOptions(choice);             //as the new song is at the index 'choice', adding 1 will return to the original song
+            }                                              //the java garbage collector will get rid of the orphaned Song object as with the lyric array
+
+            if(emptyLinkedListInsertion == true)
+            {
+               emptyLinkedListInsertion = false;
+               album.insertAtStart(tempSolo);
+               writeSongsToFile(fileName);
+               displaySongOptions(choice + 1);
+            }
          }
       }
 
@@ -301,7 +366,7 @@ public class LyricDisplayer
             {
                System.out.println("InterruptedException caugh in LyricDisplayer.java line 301");
             }
-            
+
             displaySongOptions(choice);
          }
 
@@ -433,11 +498,24 @@ public class LyricDisplayer
             }
 
             Song tempDuet = new Duet(songName, songType, 0, linesForSinger1, linesForSinger2, singer1Array, singer2Array); //creates a temporary duet object
-            album.insertSongBehind(choice - 1, tempDuet);  //this is the same as above for the solo object, instead it is now with a duet object 
 
-            writeSongsToFile(fileName);                  //writes the linked list to the file again
+            if(emptyLinkedListInsertion == false)
+            {
+               album.insertSongBehind(choice, tempDuet);  //this is the same as above for the solo object, instead it is now with a duet object 
 
-            displaySongOptions(choice + 1);              //as above with the solo option
+               writeSongsToFile(fileName);                    //writes the linked list to the file again
+
+               displaySongOptions(choice);                   //as above with the solo option
+            }
+
+            if(emptyLinkedListInsertion == true)
+            {
+               emptyLinkedListInsertion = false;
+               album.insertAtStart(tempDuet);
+               writeSongsToFile(fileName);
+               displaySongOptions(choice + 1);
+            }
+
          }
       }
 

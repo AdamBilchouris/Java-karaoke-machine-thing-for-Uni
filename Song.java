@@ -59,9 +59,5 @@ public abstract class Song
    public abstract void loadFirstSinger(Lyric[] lyricArrayParameter);
    public abstract void loadSecondSinger(Lyric[] lyricArrayParameter);
 
-   public abstract boolean isEmptySinger1(); //Not used after a different way was found
-   public abstract boolean isEmptySinger2(); //Not used after a different way was found
-
    public abstract String stringForFileWriting();
 }
-

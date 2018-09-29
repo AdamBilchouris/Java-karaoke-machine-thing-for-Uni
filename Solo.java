@@ -12,22 +12,6 @@ public class Solo extends Song
       loadFirstSinger(singer1);
    }
 
-   //Not used
-   public boolean isEmptySinger1()
-   {
-      if(lyricArr == null || lyricArr[0] == null)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   //Needed to implement this from the abstract class, always returns false as it is a solo object
-   public boolean isEmptySinger2() { return false; }
-   
    //Assigns values to each index of the array (passed in from the constructor)
    public void loadFirstSinger(Lyric[] lyricArrayParameter)
    {
@@ -48,7 +32,7 @@ public class Solo extends Song
       {
          try
          {
-            System.out.print("\f"); //Clears the screen
+            System.out.print("\f");                      //Clears the screen
             System.out.println(lyricArr[i].getLyric());  //Gets the lyric at index i
             Thread.sleep((long)lyricArr[i].getWait());   //Waits a specified amount in ms (gotten from the Lyric class, had to type-cast to a long as the API specified that
          }
@@ -88,4 +72,3 @@ public class Solo extends Song
       return toReturn;
    }
 }
-

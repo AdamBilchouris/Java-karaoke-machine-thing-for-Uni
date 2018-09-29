@@ -78,17 +78,6 @@ public class Album
       return listOfSongs.doesThisSongExist(choiceString);
    }
 
-   /*public boolean isSinger1Empty(int choice)
-   {
-      return listOfSongs.isSinger1Empty(choice);
-   }
-
-   public boolean isSinger2Empty(int choice)
-   {
-      return listOfSongs.isSinger2Empty(choice);
-   }
-   */
-
    public String stringForFileWriting()
    {
       String toReturn = name + "\n";
@@ -102,4 +91,3 @@ public class Album
       return "Name of Album: " + name; // add display for songs in album
    }
 }
-

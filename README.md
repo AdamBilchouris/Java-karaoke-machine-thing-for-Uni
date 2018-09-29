@@ -1,1 +1,1 @@
-# Java-karaoke-machine-thing-for-Uni
+childrensFavouriteSongs.txt is an example input file
