@@ -48,16 +48,6 @@ public class Album
       return listOfSongs.isEmpty();
    }
 
-   public void loadFirstSinger(Lyric[] lyricArrayParameter)
-   {
-      listOfSongs.loadFirstSinger(lyricArrayParameter);
-   }
-
-   public void loadSecondSinger(Lyric[] lyricArrayParameter)
-   {
-      listOfSongs.loadSecondSinger(lyricArrayParameter);
-   }
-
    public void displaySong(int choice)
    {
       listOfSongs.displaySong(choice);

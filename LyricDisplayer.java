@@ -49,7 +49,6 @@ public class LyricDisplayer
       else
       {
          System.out.print("\f");  //clears the screen
-         System.out.println();
       }
 
       int choice; boolean boolChoice = false;
@@ -67,7 +66,7 @@ public class LyricDisplayer
             {
                while(hasEnteredInteger != true)
                {
-                  System.out.println("There are no songs in the linked list, would you like to add a song or exit the system?");
+                  System.out.println("There are no songs in the album, would you like to add a song or exit the system?");
                   System.out.println("1. Enter a song\n\n0. Exit the System");
                   System.out.print("Enter your choice: ");
                   try
@@ -105,7 +104,7 @@ public class LyricDisplayer
       {
          while(boolChoice == false)
          {
-            System.out.println(album.getName());
+            System.out.println(album.getName() + "\n");
 
             album.displayMenuFromLinkedList();
 
@@ -126,7 +125,7 @@ public class LyricDisplayer
                   {
                      System.out.println("InterruptedException caught on line 123 of LyricDisplayer.java");
                   }
-                  System.out.println("\n\n");
+                  System.out.print("\f");
                }
                else if(choice == 0)
                {
@@ -141,7 +140,15 @@ public class LyricDisplayer
             catch(InputMismatchException e)  //catches whether the user enters anything but an integer
             {
                System.out.println("Please enter an integer\n\n");
+               try
+               {
+                  Thread.sleep(1500);
+               }
+               catch(InterruptedException f)
+               {
+               }
                kb.next();  //makes the input stream have a good bit again, not a bad bit
+               System.out.print("\f");
             }
          }
       }
@@ -173,6 +180,13 @@ public class LyricDisplayer
                if(removed == true)
                {
                   System.out.println("Song successfully removed from the album");
+                  try
+                  {
+                     Thread.sleep(1500);
+                  }
+                  catch(InterruptedException f)
+                  {
+                  }
                   writeSongsToFile(fileName);   //once the user deletes a song, it will rewrite to the file
                   menu();  //if the user decides to delete a song, it will return back to the main menu
                }
@@ -184,6 +198,12 @@ public class LyricDisplayer
 
             case 'C':
                addSongBehind(choice);
+               System.out.println("Song successfully added to the album");
+               try
+               {
+                  Thread.sleep(1500);
+               }
+               catch(InterruptedException e) {}
                break;
 
             case 'Q':
@@ -193,6 +213,11 @@ public class LyricDisplayer
 
             default:
                System.out.println("That is not a valid choice");
+               try
+               {
+                  Thread.sleep(1000);
+               }
+               catch(InterruptedException e) {}
 
          } 
       } while(boolOption != true);
@@ -538,6 +563,15 @@ public class LyricDisplayer
          try
          {
             file.createNewFile();   //tries to create a new file, it can't it will through an exception
+            System.out.println("A new file will be made called: " + fileName + ", this will truncate the file from the error down (including the whole song where the error occured)");
+            try
+            {
+               Thread.sleep(1500);
+            }
+            catch(InterruptedException e)
+            {
+            
+            }
          }
          catch(IOException e)
          {

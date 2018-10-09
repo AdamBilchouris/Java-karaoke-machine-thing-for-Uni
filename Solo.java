@@ -4,6 +4,11 @@ public class Solo extends Song
    private Lyric[] lyricArr;
    private int MAX_LYRICS;
 
+   //https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+   //The colour codes were taken from the first post, this works in PuTTY
+   private final String NORMAL_COLOUR = "\u001B[0m";
+   private final String CYAN = "\u001B[36m"; 
+
    public Solo(String name, char type, int serialNumber, int numberOfLines, Lyric[] singer1)
    {
       super(name, type, serialNumber, numberOfLines); //Calls the first constructor of the Song class
@@ -28,12 +33,20 @@ public class Solo extends Song
    //The display method, as it as a solo, nothing fancy needs to be done
    public void displaySong()
    {
+      System.out.println("\fNow playing " + super.getName());
+      try
+      {
+         Thread.sleep(1500);
+      }
+      catch(InterruptedException e)
+      {       
+      }
       for(int i = 0; i < MAX_LYRICS; i++)
       {
          try
          {
             System.out.print("\f");                      //Clears the screen
-            System.out.println(lyricArr[i].getLyric());  //Gets the lyric at index i
+            System.out.println(CYAN + lyricArr[i].getLyric() + NORMAL_COLOUR);  //Gets the lyric at index i
             Thread.sleep((long)lyricArr[i].getWait());   //Waits a specified amount in ms (gotten from the Lyric class, had to type-cast to a long as the API specified that
          }
         catch(InterruptedException e) //Exception for Thread.sleep

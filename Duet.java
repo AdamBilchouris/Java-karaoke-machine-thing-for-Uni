@@ -8,6 +8,11 @@ public class Duet extends Song
    private int counter_2;
    private int MAX_LYRICS_1;
    private int MAX_LYRICS_2;
+   
+   //taken from https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+   private final String NORMAL_COLOUR = "\u001B[0m";
+   private final String GREEN = "\u001B[32m";
+   private final String RED = "\u001B[31m";
 
    public Duet(String name, char type, int serialNumber, int numberOfLines_1, int numberOfLines_2, Lyric[] firstSinger, Lyric[] secondSinger)
    {
@@ -44,6 +49,14 @@ public class Duet extends Song
    //Calls the display() method, uses displaySong() as that is the abstract method from the song class
    public void displaySong()
    {
+      System.out.println("\fNow playing " + super.getName());
+      try
+      {
+         Thread.sleep(1500);
+      }
+      catch(InterruptedException e)
+      {
+      }
       display();
    }
 
@@ -62,7 +75,8 @@ public class Duet extends Song
 
      try
      {
-         while(singer1Counter < MAX_LYRICS_1 && singer2Counter < MAX_LYRICS_2)
+        //while(singer1Counter < (MAX_LYRICS_1 - 1) && singer2Counter < (MAX_LYRICS_2 - 1))
+         while(singer1Counter < (MAX_LYRICS_1) && (singer2Counter < MAX_LYRICS_2))
          {
             /*if(singer1Counter == MAX_LYRICS_1 || singer2Counter == MAX_LYRICS_2)
             {
@@ -75,7 +89,7 @@ public class Duet extends Song
                double wait = waitForSinger1; //as the waits are equal, it assigns it to the wait for the first singer
                try
                {
-                  System.out.println("\fSinger 1 = " + singer1[singer1Counter].getLyric() + "\nSinger 2 = " + singer2[singer2Counter].getLyric());
+                  System.out.println("\f" + RED + singer1[singer1Counter].getLyric() + "\n" + GREEN + singer2[singer2Counter].getLyric() + NORMAL_COLOUR);
                   Thread.sleep((long)wait);
                }
                catch(InterruptedException e)
@@ -106,7 +120,7 @@ public class Duet extends Song
                double wait = waitForSinger1; //assigns it to the smaller wait
                try
                {
-                  System.out.println("\fSinger 1 = " + singer1[singer1Counter].getLyric() + "\nSinger 2 = " + singer2[singer2Counter].getLyric());
+                  System.out.println("\f" + RED + singer1[singer1Counter].getLyric() + "\n" + GREEN + singer2[singer2Counter].getLyric() + NORMAL_COLOUR);
                   Thread.sleep((long)wait);
                }
                catch(InterruptedException e)
@@ -139,7 +153,7 @@ public class Duet extends Song
 
                try
                {
-                  System.out.println("\fSinger 1 = " + singer1[singer1Counter].getLyric() + "\nSinger 2 = " + singer2[singer2Counter].getLyric());
+                  System.out.println("\f" + RED + singer1[singer1Counter].getLyric() + "\n" + GREEN + singer2[singer2Counter].getLyric() + NORMAL_COLOUR);
                   Thread.sleep((long)wait);
                }
                catch(InterruptedException e)
@@ -171,7 +185,7 @@ public class Duet extends Song
       //better than getting errors
       catch(ArrayIndexOutOfBoundsException e)
       {
-         return;
+        return;
       }
    }
 

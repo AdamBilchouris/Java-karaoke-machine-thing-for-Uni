@@ -49,11 +49,6 @@ public class MyLinkedList
          return song.getType();
       }
 
-      public int getSerialNumber()
-      {
-         return song.getSerialNumber();
-      }
-
       public void displaySong()
       {
          song.displaySong();

@@ -34,11 +34,6 @@ public abstract class Song
       return name;
    }
 
-   public int getSerialNumber()
-   {
-      return serialNumber;
-   }
-
    public char getType()
    {
       return type;
