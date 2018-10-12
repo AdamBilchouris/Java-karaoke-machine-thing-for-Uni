@@ -76,7 +76,7 @@ public class Duet extends Song
      try
      {
         //while(singer1Counter < (MAX_LYRICS_1 - 1) && singer2Counter < (MAX_LYRICS_2 - 1))
-         while(singer1Counter < (MAX_LYRICS_1) && (singer2Counter < MAX_LYRICS_2))
+         while(singer1Counter < (MAX_LYRICS_1) || (singer2Counter < MAX_LYRICS_2))
          {
             /*if(singer1Counter == MAX_LYRICS_1 || singer2Counter == MAX_LYRICS_2)
             {
@@ -84,6 +84,7 @@ public class Duet extends Song
             }*/
 
             //if the two waits are equal
+            
             if(waitForSinger1 == waitForSinger2)
             {
                double wait = waitForSinger1; //as the waits are equal, it assigns it to the wait for the first singer

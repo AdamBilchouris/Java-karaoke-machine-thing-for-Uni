@@ -239,6 +239,7 @@ public class LyricDisplayer
    //asks user for information to create a song
    private static void addSongBehind(int choice)
    {
+      System.out.print("\f");
       boolean songTypeBool = false; boolean linesForSinger1Bool = false; boolean linesForSinger2Bool = false;  //a bunch of booleans for loops if the user keeps entering the wrong data type
       char songType = 'A'; String songName = null; int linesForSinger1 = 0; int linesForSinger2 = 0;           //definition of variables for the method
 
@@ -285,7 +286,7 @@ public class LyricDisplayer
             }
             catch(InterruptedException e)
             {
-               System.out.println("InterruptedException caught in LyricDisplayer.java, line 207");
+               System.out.println("InterruptedException caught in LyricDisplayer.java, line 284");
             }
             displaySongOptions(choice);
          }
@@ -295,7 +296,7 @@ public class LyricDisplayer
             //keeps asking until the user enters an integer with the specified conditions
             while(linesForSinger1Bool != true)
             {
-               System.out.print("Enter the amount of lyrics (an integer greater than 0): ");
+               System.out.print("\nEnter the amount of lyrics (an integer greater than 0): ");
                try
                {
                   linesForSinger1 = kb.nextInt();
@@ -318,7 +319,7 @@ public class LyricDisplayer
 
             Lyric[] singer1Array = new Lyric[linesForSinger1]; //creates a temporary lyric object for the temporary song object
 
-            System.out.println("You will be asked to enter lyrics for the song");
+            System.out.println("\nYou will be asked to enter lyrics for the Solo");
 
             //keeps asking for doubles and strings until the arrary is full
             for(int i = 0; i < linesForSinger1; i++)   
@@ -389,7 +390,7 @@ public class LyricDisplayer
             }
             catch(InterruptedException e)
             {
-               System.out.println("InterruptedException caugh in LyricDisplayer.java line 301");
+               System.out.println("InterruptedException caugh in LyricDisplayer.java line 394");
             }
 
             displaySongOptions(choice);
@@ -399,7 +400,7 @@ public class LyricDisplayer
          {
             while(linesForSinger1Bool != true)
             {
-               System.out.print("Enter the amount of lyrics for the first singer (an integer greater than 0): ");
+               System.out.print("\nEnter the amount of lyrics for the first singer (an integer greater than 0): ");
                try
                {
                   linesForSinger1 = kb.nextInt();
@@ -448,10 +449,9 @@ public class LyricDisplayer
 
             Lyric[] singer2Array = new Lyric[linesForSinger2]; //creates a temporary lyric arry for the second singer
 
-            System.out.println("You are adding lyrics for the first singer");
+            System.out.println("\nYou are adding lyrics for the first singer");
             for(int i = 0; i < linesForSinger1; i++)   
             {
-               System.out.print("\n");
                boolean waitBool = false;
 
                double wait = 0; String lyric = null;
@@ -478,16 +478,16 @@ public class LyricDisplayer
                      kb.next();
                   }
                }
-               System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
+               System.out.print("Please enter the lyric for line " + (i + 1) + ": ");
                lyric = kb.nextLine();
 
+               System.out.println();
                singer1Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
             }
 
             System.out.println("You are adding lyrics for the second singer");
             for(int i = 0; i < linesForSinger2; i++)   
             {
-               System.out.print("\n");
                boolean waitBool = false;
 
                double wait = 0; String lyric = null;
@@ -515,9 +515,10 @@ public class LyricDisplayer
                      kb.next();
                   }
                }
-               System.out.print("\nPlease enter the lyric for line " + (i + 1) + ": ");
+               System.out.print("Please enter the lyric for line " + (i + 1) + ": ");
                lyric = kb.nextLine();
 
+               System.out.println();
                singer2Array[i] = new Lyric(lyric, wait); //creates a lyric object at index i for the temporary array
 
             }
